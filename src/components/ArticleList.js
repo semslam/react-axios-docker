@@ -1,39 +1,3 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import ArticleCard from "./Article";
-
-const ArticleList = (props) => {
-  console.log(props);
-
-  const deleteArticleHandler = (id) => {
-    props.getArticleId(id);
-  };
-
-  const renderArticleList = props.articles.map((article) => {
-    return (
-      <ArticleCard
-      article={article}
-        clickHander={deleteArticleHandler}
-        key={article.id}
-      />
-    );
-  });
-  return (
-    <div className="main">
-      <h2>
-        Article List
-        <Link to="/add">
-          <button className="ui button blue right">Add Article</button>
-        </Link>
-      </h2>
-      <div className="ui celled list">{renderArticleList}</div>
-    </div>
-  );
-};
-
-// export default ArticleList;
-
-
 import React, { useState, useEffect } from "react";
 import ArticleDataService from "../services/article.service";
 import { Link } from "react-router-dom";
@@ -42,7 +6,7 @@ const ArticlesList = () => {
   const [articles, setArticles] = useState([]);
   const [currentArticle, setCurrentArticle] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(-1);
-  const [searchTitle, setSearchTitle] = useState("");
+  const [searchHeading, setSearchHeading] = useState("");
 
   useEffect(() => {
     retrieveArticles();
@@ -57,40 +21,42 @@ const ArticlesList = () => {
     ArticleDataService.getAll()
       .then(response => {
         setArticles(response.data.data);
-        console.log(response.data);
+        console.log(response.data.data);
       })
       .catch(e => {
         console.log(e);
       });
   };
 
-  const refreshList = () => {
-    retrieveArticles();
-    setCurrentTutorial(null);
-    setCurrentIndex(-1);
-  };
+  // const refreshList = () => {
+  //   retrieveArticles();
+  //   setCurrentArticle(null);
+  //   setCurrentIndex(-1);
+  // };
 
-  const setActiveTutorial = (tutorial, index) => {
-    setCurrentTutorial(tutorial);
+  const setActiveArticle = (article, index) => {
+    setCurrentArticle(article);
     setCurrentIndex(index);
   };
 
-  const removeAllTutorials = () => {
-    TutorialDataService.removeAll()
-      .then(response => {
-        console.log(response.data);
-        refreshList();
-      })
-      .catch(e => {
-        console.log(e);
-      });
-  };
+  // const removeAllTutorials = () => {
 
-  const findByTitle = () => {
-    TutorialDataService.findByTitle(searchTitle)
+  //  // remove this function
+  //   ArticleDataService.delete(4)
+  //     .then(response => {
+  //       console.log(response.data);
+  //       refreshList();
+  //     })
+  //     .catch(e => {
+  //       console.log(e);
+  //     });
+  // };
+
+  const findByHeading = () => {
+    ArticleDataService.findByHeading(searchHeading)
       .then(response => {
-        setTutorials(response.data);
-        console.log(response.data);
+        setArticles(response.data.data);
+        console.log(response.data.data);
       })
       .catch(e => {
         console.log(e);
@@ -104,15 +70,15 @@ const ArticlesList = () => {
           <input
             type="text"
             className="form-control"
-            placeholder="Search by title"
-            value={searchTitle}
-            onChange={onChangeSearchTitle}
+            placeholder="Search by heading"
+            value={searchHeading}
+            onChange={onChangeSearchHeading}
           />
           <div className="input-group-append">
             <button
               className="btn btn-outline-secondary"
               type="button"
-              onClick={findByTitle}
+              onClick={findByHeading}
             >
               Search
             </button>
@@ -120,55 +86,61 @@ const ArticlesList = () => {
         </div>
       </div>
       <div className="col-md-6">
-        <h4>Tutorials List</h4>
+        <h4>Articles List</h4>
 
         <ul className="list-group">
-          {tutorials &&
-            tutorials.map((tutorial, index) => (
+          {articles &&
+            articles.map((article, index) => (
               <li
                 className={
                   "list-group-item " + (index === currentIndex ? "active" : "")
                 }
-                onClick={() => setActiveTutorial(tutorial, index)}
+                onClick={() => setActiveArticle(article, index)}
                 key={index}
               >
-                {tutorial.title}
+                {article.heading}
               </li>
             ))}
         </ul>
 
-        <button
+        {/* <button
           className="m-3 btn btn-sm btn-danger"
-          onClick={removeAllTutorials}
+          onClick={removeAllArticles}
         >
           Remove All
-        </button>
+        </button> */}
       </div>
       <div className="col-md-6">
-        {currentTutorial ? (
+        {currentArticle ? (
           <div>
-            <h4>Tutorial</h4>
+            <h4>Article</h4>
             <div>
               <label>
-                <strong>Title:</strong>
+                <strong>heading:</strong>
               </label>{" "}
-              {currentTutorial.title}
+              {currentArticle.heading}
             </div>
             <div>
               <label>
-                <strong>Description:</strong>
+                <strong>Content:</strong>
               </label>{" "}
-              {currentTutorial.description}
+              {currentArticle.content}
             </div>
             <div>
               <label>
-                <strong>Status:</strong>
+                <strong>Created Date:</strong>
               </label>{" "}
-              {currentTutorial.published ? "Published" : "Pending"}
+              {currentArticle.created_at}
             </div>
-
+            <div>
+              <label>
+                <strong>updated Date:</strong>
+              </label>{" "}
+              {currentArticle.updated_at}
+            </div>
+      
             <Link
-              to={"/tutorials/" + currentTutorial.id}
+              to={"/article/" + currentArticle.id}
               className="badge badge-warning"
             >
               Edit
@@ -177,7 +149,7 @@ const ArticlesList = () => {
         ) : (
           <div>
             <br />
-            <p>Please click on a Tutorial...</p>
+            <p>Please click on a Article...</p>
           </div>
         )}
       </div>
@@ -185,4 +157,4 @@ const ArticlesList = () => {
   );
 };
 
-export default ArticleList;
+export default ArticlesList;

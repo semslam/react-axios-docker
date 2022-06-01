@@ -10,9 +10,7 @@ const Article = props => {
   const initialArticleState = {
     id: null,
     heading: "",
-    content: "",
-    created_at:null,
-    updated_at:null
+    content: ""
   };
   const [currentArticle, setCurrentArticle] = useState(initialArticleState);
   const [message, setMessage] = useState("");
@@ -20,8 +18,9 @@ const Article = props => {
   const getArticle = id => {
     ArticleDataService.get(id)
       .then(response => {
-        setCurrentArticle(response.data.data);
         console.log(response.data);
+        setCurrentArticle(response.data.data);
+        
       })
       .catch(e => {
         console.log(e);
@@ -38,22 +37,22 @@ const Article = props => {
     setCurrentArticle({ ...currentArticle, [name]: value });
   };
 
-  const updatePublished = () => {
-    var data = {
-      id: currentArticle.id,
-      heading: currentArticle.heading,
-      content: currentArticle.content,
-    };
+  // const updatePublished = () => {
+  //   var data = {
+  //     id: currentArticle.id,
+  //     heading: currentArticle.heading,
+  //     content: currentArticle.content,
+  //   };
 
-    ArticleDataService.update(currentArticle.id, data)
-      .then(response => {
-        setCurrentArticle({ ...currentArticle});
-        console.log(response.data);
-      })
-      .catch(e => {
-        console.log(e);
-      });
-  };
+  //   ArticleDataService.update(currentArticle.id, data)
+  //     .then(response => {
+  //       setCurrentArticle({ ...currentArticle});
+  //       console.log(response.data);
+  //     })
+  //     .catch(e => {
+  //       console.log(e);
+  //     });
+  // };
 
   const updateArticle = () => {
     ArticleDataService.update(currentArticle.id, currentArticle)
@@ -67,7 +66,9 @@ const Article = props => {
   };
 
   const deleteArticle = () => {
-    ArticleDataService.remove(currentArticle.id)
+    console.log("Delete Article ====>");
+    console.log(currentArticle.id)
+    ArticleDataService.delete(currentArticle.id)
       .then(response => {
         console.log(response.data);
         navigate("/articles");
