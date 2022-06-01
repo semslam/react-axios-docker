@@ -1,7 +1,7 @@
 import './App.css';
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
-import Header from "./components/Header";
+// import Header from "./components/Header";
 import AddArticle from './components/AddArticle';
 import ArticleDetail from './components/ArticleDetail';
 import EditArticle from './components/EditArticle';
@@ -15,7 +15,7 @@ function App() {
   
   const retrieveArticles = async () => {
     const response = await articleDataService.getAll();
-    return response.data;
+    return response.data.data;
   };
 
   const addArticleHandler = async (article) => {
@@ -26,17 +26,17 @@ function App() {
 
     const response = await articleDataService.create(request);
     console.log(response);
-    setArticles([...articles, response.data]);
+    setArticles([...articles, response.data.data]);
     console.log(response);
-    setArticles([...articles, response.data]);
+    setArticles([...articles, response.data.data]);
   };
 
   const updateArticleHandler = async (article) => {
     const response = await articleDataService.update(article.id, article) // api.put(`/contacts/${article.id}`, contact);
-    const { id } = response.data;
+    const { id } = response.data.data;
     setArticles(
       articles.map((article) => {
-        return article.id === id ? { ...response.data } : article;
+        return article.id === id ? { ...response.data.data } : article;
       })
     );
   };
@@ -64,8 +64,8 @@ function App() {
     
   }, [articles]);
   return (
-      <Router basename="/">
-        <Header />
+      <Router >
+        {/* <Header /> */}
         <div className="container mt-3">
           <Routes>
             <Route path="/" 
