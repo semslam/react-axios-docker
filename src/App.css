@@ -26,7 +26,24 @@ li a:hover:not(.active) {
   background-color: #04AA6D;
 }
 
-.main {
+
+.list {
+  text-align: left;
+  max-width: 750px;
+  margin: auto;
+}
+
+.submit-form {
+  max-width: 300px;
+  margin: auto;
+}
+
+.edit-form {
+  max-width: 300px;
+  margin: auto;
+}
+
+/* .main {
   margin-top: 5em;
 }
 
@@ -55,6 +72,6 @@ i.icon {
 }
 .center-div {
   text-align: center;
-}
+} */
 
 

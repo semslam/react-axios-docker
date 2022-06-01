@@ -1,51 +1,92 @@
-import React from "react";
+import React, { useState } from "react";
+import ArticleDataService from "../services/article.service";
 
-class AddArticle extends React.Component {
-  state = {
+const AddArticle = () => {
+  const initialArticleState = {
+    id: null,
     heading: "",
     content: "",
+    created_at:null,
+    updated_at:null
+  };
+  const [article, setArticle] = useState(initialArticleState);
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleInputChange = event => {
+    const { name, value } = event.target;
+    setArticle({ ...article, [name]: value });
   };
 
-  add = (e) => {
-    e.preventDefault();
-    if (this.state.heading === "" || this.state.content === "") {
-      alert("ALl the fields are mandatory!");
-      return;
-    }
-    this.props.addArticleHandler(this.state);
-    this.setState({ heading: "", content: "" });
-    this.props.history.push("/");
+  const saveArticle = () => {
+    var data = {
+        heading: article.heading,
+        content: article.content
+    };
+
+    ArticleDataService.create(data)
+      .then(response => {
+        setArticle({
+          id: response.data.data.id,
+          heading: response.data.data.heading,
+          content: response.data.data.content
+        });
+        setSubmitted(true);
+        console.log(response.data);
+      })
+      .catch(e => {
+        console.log(e);
+      });
   };
-  render() {
-    return (
-      <div className="ui main">
-        <h2>Add Article</h2>
-        <form className="ui form" onSubmit={this.add}>
-          <div className="field">
-            <label>Heading</label>
+
+  const newArticle = () => {
+    setArticle(initialArticleState);
+    setSubmitted(false);
+  };
+
+  return (
+    <div className="submit-form">
+      {submitted ? (
+        <div>
+          <h4>You submitted successfully!</h4>
+          <button className="btn btn-success" onClick={newArticle}>
+            Add
+          </button>
+        </div>
+      ) : (
+        <div>
+          <div className="form-group">
+            <label htmlFor="heading">Heading</label>
             <input
               type="text"
+              className="form-control"
+              id="heading"
+              required
+              value={article.heading}
+              onChange={handleInputChange}
               name="heading"
-              placeholder="Heading"
-              value={this.state.heading}
-              onChange={(e) => this.setState({ heading: e.target.value })}
             />
           </div>
-          <div className="field">
-            <label>Content</label>
+
+          <div className="form-group">
+            <label htmlFor="content">Content</label>
             <input
-              type="textarea"
+              type="text"
+              className="form-control"
+              id="content"
+              required
+              value={article.content}
+              onChange={handleInputChange}
               name="content"
-              placeholder="Content"
-              value={this.state.content}
-              onChange={(e) => this.setState({ content: e.target.value })}
             />
           </div>
-          <button className="ui button blue">Add Article</button>
-        </form>
-      </div>
-    );
-  }
-}
+
+          <button onClick={saveArticle} className="btn btn-success">
+            Submit
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default AddArticle;
