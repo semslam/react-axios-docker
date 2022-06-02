@@ -27,30 +27,11 @@ const ArticlesList = () => {
         console.log(e);
       });
   };
-
-  // const refreshList = () => {
-  //   retrieveArticles();
-  //   setCurrentArticle(null);
-  //   setCurrentIndex(-1);
-  // };
-
+  
   const setActiveArticle = (article, index) => {
     setCurrentArticle(article);
     setCurrentIndex(index);
   };
-
-  // const removeAllTutorials = () => {
-
-  //  // remove this function
-  //   ArticleDataService.delete(4)
-  //     .then(response => {
-  //       console.log(response.data);
-  //       refreshList();
-  //     })
-  //     .catch(e => {
-  //       console.log(e);
-  //     });
-  // };
 
   const findByHeading = () => {
     ArticleDataService.findByHeading(searchHeading)
@@ -102,13 +83,6 @@ const ArticlesList = () => {
               </li>
             ))}
         </ul>
-
-        {/* <button
-          className="m-3 btn btn-sm btn-danger"
-          onClick={removeAllArticles}
-        >
-          Remove All
-        </button> */}
       </div>
       <div className="col-md-6">
         {currentArticle ? (

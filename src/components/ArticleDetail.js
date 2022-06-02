@@ -3,13 +3,13 @@ import { Link } from "react-router-dom";
 
 
 const ArticleDetail = (props) => {
-  const { heading, content } = props.location.state.article;
+  const { heading, content,create_at } = props.location.state.article;
   return (
     <div className="main">
       <div className="ui card centered">
         <div className="content">
           <div className="header">{heading}</div>
-          <div className="description">{content}</div>
+          <div className="content">{content}</div>
         </div>
       </div>
       <div className="center-div">

@@ -37,23 +37,6 @@ const Article = props => {
     setCurrentArticle({ ...currentArticle, [name]: value });
   };
 
-  // const updatePublished = () => {
-  //   var data = {
-  //     id: currentArticle.id,
-  //     heading: currentArticle.heading,
-  //     content: currentArticle.content,
-  //   };
-
-  //   ArticleDataService.update(currentArticle.id, data)
-  //     .then(response => {
-  //       setCurrentArticle({ ...currentArticle});
-  //       console.log(response.data);
-  //     })
-  //     .catch(e => {
-  //       console.log(e);
-  //     });
-  // };
-
   const updateArticle = () => {
     ArticleDataService.update(currentArticle.id, currentArticle)
       .then(response => {
