@@ -6,16 +6,16 @@ const ArticlesList = () => {
   const [articles, setArticles] = useState([]);
   const [currentArticle, setCurrentArticle] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(-1);
-  const [searchHeading, setSearchHeading] = useState("");
+  // const [searchHeading, setSearchHeading] = useState("");
 
   useEffect(() => {
     retrieveArticles();
   }, []);
 
-  const onChangeSearchHeading = e => {
-    const searchHeading = e.target.value;
-    setSearchHeading(searchHeading);
-  };
+  // const onChangeSearchHeading = e => {
+  //   const searchHeading = e.target.value;
+  //   setSearchHeading(searchHeading);
+  // };
 
   const retrieveArticles = () => {
     ArticleDataService.getAll()
@@ -27,62 +27,57 @@ const ArticlesList = () => {
         console.log(e);
       });
   };
-  
+
   const setActiveArticle = (article, index) => {
     setCurrentArticle(article);
     setCurrentIndex(index);
   };
 
-  const findByHeading = () => {
-    ArticleDataService.findByHeading(searchHeading)
-      .then(response => {
-        setArticles(response.data.data);
-        console.log(response.data.data);
-      })
-      .catch(e => {
-        console.log(e);
-      });
-  };
+  // const findByHeading = () => {
+  //   ArticleDataService.findByHeading(searchHeading)
+  //     .then(response => {
+  //       setArticles(response.data.data);
+  //       console.log(response.data.data);
+  //     })
+  //     .catch(e => {
+  //       console.log(e);
+  //     });
+  // };
 
   return (
     <div className="list row">
-      <div className="col-md-8">
-        <div className="input-group mb-3">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Search by heading"
-            value={searchHeading}
-            onChange={onChangeSearchHeading}
-          />
-          <div className="input-group-append">
-            <button
-              className="btn btn-outline-secondary"
-              type="button"
-              onClick={findByHeading}
-            >
-              Search
-            </button>
-          </div>
-        </div>
-      </div>
+      
       <div className="col-md-6">
         <h4>Articles List</h4>
-
-        <ul className="list-group">
-          {articles &&
+        <table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Title</th>
+      <th scope="col">Creation Date</th>
+    </tr>
+  </thead>
+  <tbody>
+  {articles &&
             articles.map((article, index) => (
-              <li
+              <tr>
+              <td>{index +=1}</td>
+              <td
                 className={
-                  "list-group-item " + (index === currentIndex ? "active" : "")
+                (index === currentIndex ? "active" : "")
                 }
                 onClick={() => setActiveArticle(article, index)}
                 key={index}
               >
                 {article.heading}
-              </li>
+                </td>
+                <td>{new Date(article.created_at).toString()}</td>
+              </tr>
             ))}
-        </ul>
+    
+  </tbody>
+</table>
+
       </div>
       <div className="col-md-6">
         {currentArticle ? (
@@ -114,8 +109,8 @@ const ArticlesList = () => {
             </div>
       
             <Link
-              to={"/article/" + currentArticle.id}
-              className="badge badge-warning"
+              to={`/articles/${currentArticle.id}`}
+              className="btn btn-info btn-sm"
             >
               Edit
             </Link>
@@ -123,7 +118,12 @@ const ArticlesList = () => {
         ) : (
           <div>
             <br />
-            <p>Please click on a Article...</p>
+            <Link
+              to={`/add`}
+              className="btn btn-success"
+            >
+              Create Article
+            </Link>
           </div>
         )}
       </div>

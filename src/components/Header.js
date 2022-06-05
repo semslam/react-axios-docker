@@ -7,7 +7,7 @@ const Header = () => {
       <ul>
         <li>
           <Link to={"/articles"} className="active">
-            Home
+            Article Home
           </Link>
         </li>
         <li>
