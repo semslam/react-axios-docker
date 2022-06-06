@@ -1,26 +1,23 @@
 import React, { useState, useEffect } from "react";
 import ArticleDataService from "../services/article.service";
 import { Link } from "react-router-dom";
+import { formatDate } from "../libraries/DateFormat";
 
 const ArticlesList = () => {
   const [articles, setArticles] = useState([]);
   const [currentArticle, setCurrentArticle] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(-1);
-  // const [searchHeading, setSearchHeading] = useState("");
 
   useEffect(() => {
     retrieveArticles();
   }, []);
 
-  // const onChangeSearchHeading = e => {
-  //   const searchHeading = e.target.value;
-  //   setSearchHeading(searchHeading);
-  // };
+
 
   const retrieveArticles = () => {
     ArticleDataService.getAll()
       .then(response => {
-        setArticles(response.data.data);
+        setArticles(response.data.data.sort((a, b)=>{return b.id - a.id}));
         console.log(response.data.data);
       })
       .catch(e => {
@@ -33,16 +30,6 @@ const ArticlesList = () => {
     setCurrentIndex(index);
   };
 
-  // const findByHeading = () => {
-  //   ArticleDataService.findByHeading(searchHeading)
-  //     .then(response => {
-  //       setArticles(response.data.data);
-  //       console.log(response.data.data);
-  //     })
-  //     .catch(e => {
-  //       console.log(e);
-  //     });
-  // };
 
   return (
     <div className="list row">
@@ -61,7 +48,7 @@ const ArticlesList = () => {
   {articles &&
             articles.map((article, index) => (
               <tr>
-              <td>{index +=1}</td>
+              <td>{article.id}</td>
               <td
                 className={
                 (index === currentIndex ? "active" : "")
@@ -71,7 +58,7 @@ const ArticlesList = () => {
               >
                 {article.heading}
                 </td>
-                <td>{new Date(article.created_at).toString()}</td>
+                <td>{formatDate(article.created_at)}</td>
               </tr>
             ))}
     
@@ -85,7 +72,7 @@ const ArticlesList = () => {
             <h4>Article</h4>
             <div>
               <label>
-                <strong>heading:</strong>
+                <strong>Heading:</strong>
               </label>{" "}
               {currentArticle.heading}
             </div>
@@ -99,13 +86,17 @@ const ArticlesList = () => {
               <label>
                 <strong>Created Date:</strong>
               </label>{" "}
-              {currentArticle.created_at}
+              {formatDate(currentArticle.created_at) }
             </div>
             <div>
-              <label>
-                <strong>updated Date:</strong>
-              </label>{" "}
-              {currentArticle.updated_at}
+               <label>
+                 <strong>Updated Date:</strong>
+               </label>
+            {
+              (formatDate(currentArticle.created_at) === formatDate(currentArticle.updated_at))?
+               <div></div> : 
+              formatDate(currentArticle.updated_at)
+            }
             </div>
       
             <Link

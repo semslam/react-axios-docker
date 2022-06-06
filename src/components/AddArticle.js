@@ -69,7 +69,7 @@ const AddArticle = () => {
 
           <div className="form-group">
             <label htmlFor="content">Content</label>
-            <input
+            <textarea
               type="text"
               className="form-control"
               id="content"

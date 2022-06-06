@@ -80,7 +80,7 @@ const Article = props => {
             </div>
             <div className="form-group">
               <label htmlFor="content">Content</label>
-              <input
+              <textarea
                 type="text"
                 className="form-control"
                 id="content"
@@ -91,13 +91,13 @@ const Article = props => {
             </div>
           </form>
 
-          <button className="badge badge-danger mr-2" onClick={deleteArticle}>
+          <button className="btn btn-danger btn-sm" onClick={deleteArticle}>
             Delete
           </button>
-
+          &#160; &#160;
           <button
             type="submit"
-            className="badge badge-success"
+            className="btn btn-success btn-sm"
             onClick={updateArticle}
           >
             Update
