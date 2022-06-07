@@ -6,8 +6,6 @@ import ArticleDataService from "../services/article.service";
 
 const ArticleDetail = (props) => {
     const { id,edit }= useParams();
-    console.log("ArticleDetail==========>");
-    console.log(id,edit )
     const initialArticleState = {
       id: null,
       heading: "",

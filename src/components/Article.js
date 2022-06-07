@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import ArticleDataService from "../services/article.service";
 
 const Article = props => {
@@ -14,11 +14,11 @@ const Article = props => {
   };
   const [currentArticle, setCurrentArticle] = useState(initialArticleState);
   const [message, setMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const getArticle = id => {
     ArticleDataService.get(id)
       .then(response => {
-        console.log(response.data);
         setCurrentArticle(response.data.data);
         
       })
@@ -40,24 +40,22 @@ const Article = props => {
   const updateArticle = () => {
     ArticleDataService.update(currentArticle.id, currentArticle)
       .then(response => {
-        console.log(response.data);
         setMessage("The article was updated successfully!");
       })
       .catch(e => {
-        console.log(e);
+        console.log(e.response.data.message);
+        setErrorMessage(e.response.data.message);
       });
   };
 
   const deleteArticle = () => {
-    console.log("Delete Article ====>");
-    console.log(currentArticle.id)
     ArticleDataService.delete(currentArticle.id)
       .then(response => {
-        console.log(response.data);
         navigate("/articles");
       })
       .catch(e => {
-        console.log(e);
+        console.log(e.response.data.message);
+        setErrorMessage(e.response.data.message);
       });
   };
 
@@ -66,6 +64,7 @@ const Article = props => {
       {currentArticle ? (
         <div className="edit-form">
           <h4>Article</h4>
+          <p className="error">{errorMessage}</p>
           <form>
             <div className="form-group">
               <label htmlFor="heading">Heading</label>
@@ -107,7 +106,12 @@ const Article = props => {
       ) : (
         <div>
           <br />
-          <p>Please click on a Article...</p>
+          <Link
+              to={`/add`}
+              className="btn btn-success"
+            >
+              Create Article
+            </Link>
         </div>
       )}
     </div>

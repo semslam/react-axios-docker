@@ -43,5 +43,9 @@ li a:hover:not(.active) {
   margin: auto;
 }
 
+.error{
+  color:red;
+}
+
 
 

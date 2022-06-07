@@ -18,7 +18,6 @@ const ArticlesList = () => {
     ArticleDataService.getAll()
       .then(response => {
         setArticles(response.data.data.sort((a, b)=>{return b.id - a.id}));
-        console.log(response.data.data);
       })
       .catch(e => {
         console.log(e);
@@ -36,8 +35,8 @@ const ArticlesList = () => {
       
       <div className="col-md-6">
         <h4>Articles List</h4>
-        <table class="table">
-  <thead class="thead-dark">
+        <table className="table">
+  <thead className="thead-dark">
     <tr>
       <th scope="col">ID</th>
       <th scope="col">Title</th>
@@ -45,7 +44,8 @@ const ArticlesList = () => {
     </tr>
   </thead>
   <tbody>
-  {articles &&
+ 
+  {articles.length ? (
             articles.map((article, index) => (
               <tr>
               <td>{article.id}</td>
@@ -60,7 +60,11 @@ const ArticlesList = () => {
                 </td>
                 <td>{formatDate(article.created_at)}</td>
               </tr>
-            ))}
+            ))):(
+              <tr>
+                <td colSpan="3">Article record not available!</td>
+              </tr>
+            )}
     
   </tbody>
 </table>

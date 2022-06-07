@@ -11,6 +11,7 @@ const AddArticle = () => {
   };
   const [article, setArticle] = useState(initialArticleState);
   const [submitted, setSubmitted] = useState(false);
+  const [message, setMessage] = useState("");
 
   const handleInputChange = event => {
     const { name, value } = event.target;
@@ -22,19 +23,20 @@ const AddArticle = () => {
         heading: article.heading,
         content: article.content
     };
-
     ArticleDataService.create(data)
       .then(response => {
         setArticle({
-          id: response.data.data.id,
-          heading: response.data.data.heading,
-          content: response.data.data.content
+            id: response.data.data.id,
+            heading: response.data.data.heading,
+            content: response.data.data.content
         });
         setSubmitted(true);
         console.log(response.data);
+     
       })
       .catch(e => {
-        console.log(e);
+        console.log(e.response.data.message);  
+        setMessage(e.response.data.message);
       });
   };
 
@@ -54,13 +56,13 @@ const AddArticle = () => {
         </div>
       ) : (
         <div>
+            <p className="error">{message}</p>
           <div className="form-group">
             <label htmlFor="heading">Heading</label>
             <input
               type="text"
               className="form-control"
               id="heading"
-              required
               value={article.heading}
               onChange={handleInputChange}
               name="heading"
@@ -70,7 +72,6 @@ const AddArticle = () => {
           <div className="form-group">
             <label htmlFor="content">Content</label>
             <textarea
-              type="text"
               className="form-control"
               id="content"
               required
